@@ -51,7 +51,7 @@ int main ()
     }
     
     std::cout << "graph nodes: " << n << '\n';
-    std::cout << "Time:           " << std::chrono::duration<double>(end - start).count();
+    std::cout << "Time:        " << std::chrono::duration<double>(end - start).count() << '\n';
 
     return 0;
 }
