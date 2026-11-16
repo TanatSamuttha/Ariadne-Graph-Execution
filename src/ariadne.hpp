@@ -196,9 +196,9 @@ namespace Ariadne
             }
         }
 
-        void pushTask (size_t nextId, bool active, bool isCycle)
+        void pushTask (size_t nextId, bool active, bool noWait)
         {
-            if (isCycle)
+            if (noWait)
             { 
                 tasks.emplace(nextId);
                 setActive(nextId, active);
@@ -321,11 +321,14 @@ namespace Ariadne
                 throw std::runtime_error("No worker");
             executing = true;
             std::lock_guard<std::mutex> glock(tasksLock);
-            pushTask(nodeIds[START], true, true);
+            if (initializedAdjacent)
+                pushTask(nodeIds[START], true, true);
         }
 
         void wait ()
         {
+            if (!initializedAdjacent)
+                return;
             std::unique_lock<std::mutex> uLock(executingLock);
             executingCV.wait(uLock, [&]()
             {

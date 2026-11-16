@@ -121,11 +121,21 @@ void Test3 ()
     graph.destroyWorker();
 }
 
+void Test4 ()
+{
+    Ariadne::Graph<Ariadne::NoState> graph;
+    graph.spawnWorker(4);
+    graph.exec();
+    graph.wait();
+    graph.destroyWorker();
+}
+
 int main (int argc, char* argv[])
 {
     if ((std::string)argv[1] == "1") Test1();
     if ((std::string)argv[1] == "2") Test2();
     if ((std::string)argv[1] == "3") Test3();
+    if ((std::string)argv[1] == "4") Test4();
 
     return 0;
 }
