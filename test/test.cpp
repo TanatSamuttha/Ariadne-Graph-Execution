@@ -115,7 +115,7 @@ void Test3 ()
 
     graph.print();
 
-    graph.spawnWorker(3);
+    graph.spawnWorker();
     graph.exec();
     graph.wait();
     graph.destroyWorker();

@@ -233,6 +233,21 @@ namespace Ariadne
             }
         }
 
+        void maxParallel (size_t nodeId, size_t depth, std::vector<size_t>& counts, size_t& maxCount)
+        {
+            if (depth >= counts.size())
+                counts.resize(depth + 1);
+
+            ++counts[depth];
+            maxCount = std::max(maxCount, counts[depth]);
+
+            for (Incedent nextNode : adjacent[nodeId])
+            {
+                if (!nextNode.isCycle)
+                    maxParallel(nextNode.nodeId, depth + 1, counts, maxCount);
+            }
+        }
+
     public:
         std::shared_ptr<T> state;
 
@@ -291,6 +306,15 @@ namespace Ariadne
         void addCycleEdge (std::string origin, std::string destination)
         {
             generalAddEdge(origin, destination, true);
+        }
+
+        void spawnWorker()
+        {
+            size_t maxCount = 0;
+            std::vector<size_t> counts;
+            if (initializedAdjacent)
+                maxParallel(nodeIds[START], 0, counts, maxCount);
+            spawnWorker(maxCount);
         }
 
         void spawnWorker (size_t workers)
